@@ -21,7 +21,7 @@ export class MealsModel {
     id: t.Number(),
   });
   public static storeMealsSchema = t.Omit(_createMealsSchema, ['id']);
-  public static updateMealsSchema = _updateMealsSchema;
+  public static updateMealsSchema = t.Omit(_updateMealsSchema, ['user_id']);
   public static selectMealsSchema = _selectMealsSchema;
 
   static async index() {
@@ -65,4 +65,36 @@ export class MealsModel {
 
     return newMeal;
   };
+
+  static async update(id: number, meal: Static<typeof MealsModel.updateMealsSchema>) {
+    const updatedMeal = await db
+      .update(table.mealsTable)
+      .set(meal)
+      .where(eq(table.mealsTable.id, id))
+      .returning({
+        id: table.mealsTable.id
+      });
+
+    if (!updatedMeal) {
+      throw new Error('Meal not found');
+    }
+
+    return updatedMeal;
+  }
+
+  static async destroy(id: number) {
+    const deletedMeal = await db
+      .delete(table.mealsTable)
+      .where(eq(table.mealsTable.id, id))
+      .returning({
+        id: table.mealsTable.id
+      })
+      .get();
+
+    if (!deletedMeal) {
+      throw new Error('Meal not found');
+    }
+
+    return deletedMeal;
+  }
 }

@@ -31,6 +31,25 @@ apiRoutes.group("/meals", (app) => {
       {
         body: MealsModel.storeMealsSchema
       }
+    )
+    .put("/:id",
+      async (props) => {
+        const updatedMeal = await MealsModel.update(props.params.id, props.body);
+        return updatedMeal;
+      },
+      {
+        params: MealsModel.showMealsSchema,
+        body: MealsModel.updateMealsSchema
+      }
+    )
+    .delete("/:id",
+      async (props) => {
+        await MealsModel.destroy(props.params.id);
+        return "Meal deleted";
+      },
+      {
+        params: MealsModel.showMealsSchema
+      }
     );
 });
 

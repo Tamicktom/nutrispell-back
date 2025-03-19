@@ -9,6 +9,8 @@
 		"@elysiajs/cors": "^1.2.0",
 		"@elysiajs/static": "^1.2.0",
 		"@elysiajs/swagger": "^1.2.2",
+		"@sinclair/typebox": "^0.34.30",
+		"better-sqlite3": "^11.9.1",
 		"drizzle-orm": "^0.40.1",
 		"elysia": "latest"
 	},

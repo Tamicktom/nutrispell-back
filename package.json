@@ -12,6 +12,7 @@
 		"@sinclair/typebox": "^0.34.30",
 		"better-sqlite3": "^11.9.1",
 		"drizzle-orm": "^0.40.1",
+		"drizzle-typebox": "^0.3.0",
 		"elysia": "latest"
 	},
 	"devDependencies": {

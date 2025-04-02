@@ -17,7 +17,7 @@ export const mealsTable = sqliteTable("meals_table", {
   id: int().primaryKey({ autoIncrement: true }),
   name: text().notNull(),
   kalories: int().notNull(),
-  image_url: text(),
+  image_path: text().notNull(),
 
   user_id: int().notNull(),
 });

@@ -27,6 +27,20 @@ apiRoutes.group("/meals", (app) => {
         body: t.Object({
           image: t.File({ format: "image/jpeg" })
         }),
+        detail: {
+          description: "The user can upload an image of a meal and the server will predict the meals in the image.",
+        },
+        response: {
+          200: t.Object({
+            meals: t.Array(t.Object({
+              name: t.String(),
+              description: t.String(),
+              kalories: t.Number(),
+              weight: t.Number(),
+            })),
+            imagePath: t.String(),
+          }),
+        }
       }
     )
     .get("/",
@@ -34,6 +48,22 @@ apiRoutes.group("/meals", (app) => {
         const meals = await MealsModel.index();
         return meals;
       },
+      {
+        query: t.Object({
+          page: t.Optional(t.Number()),
+          limit: t.Optional(t.Number()),
+        }),
+        detail: {
+          description: "Get all meals from the logged user. The user can use the query params to paginate the results.",
+        },
+        response: {
+          200: t.Array(t.Object({
+            id: t.Number(),
+            name: t.String(),
+            kalories: t.Number(),
+          })),
+        }
+      }
     )
     .get("/:id",
       async (props) => {
@@ -41,8 +71,18 @@ apiRoutes.group("/meals", (app) => {
         return meal;
       },
       {
-        params: MealsModel.showMealsSchema
-      }
+        params: MealsModel.showMealsSchema,
+        detail: {
+          description: "Get a meal by id. The user can use the query params to paginate the results.",
+        },
+        response: {
+          200: t.Object({
+            id: t.Number(),
+            name: t.String(),
+            kalories: t.Number(),
+          }),
+        }
+      },
     )
     .post("/",
       async (props) => {
@@ -52,15 +92,36 @@ apiRoutes.group("/meals", (app) => {
         const imageExist = await Bun.file(`.${imagePath}`, { type: "image/jpeg" }).exists();
 
         if (!imageExist) {
-          throw new Error("Image not found");
+          props.set.status = 400;
+          return {
+            status: 400,
+            message: "image_not_found",
+            error: "ImagePath not found in the server",
+          };
         }
 
         const newMeal = await MealsModel.store(props.body);
 
+        props.set.status = 201;
         return newMeal;
       },
       {
         body: MealsModel.storeMealsSchema,
+        detail: {
+          description: "The user can create a new meal.",
+        },
+        response: {
+          201: t.Object({
+            id: t.Number(),
+            name: t.String(),
+            kalories: t.Number(),
+          }),
+          400: t.Object({
+            status: t.Number(),
+            message: t.String(),
+            error: t.String(),
+          }),
+        }
       }
     )
     .put("/:id",

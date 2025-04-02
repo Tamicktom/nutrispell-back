@@ -55,7 +55,7 @@ export class MealsModel {
     return meal;
   }
 
-  static async store(meal: Static<typeof MealsModel.storeMealsSchema>) {
+  static async store(meal: Static<typeof MealsModel.storeMealsSchema>, image: File) {
     const newMeal = await db
       .insert(table.mealsTable)
       .values(meal)

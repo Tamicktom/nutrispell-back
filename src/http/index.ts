@@ -25,11 +25,25 @@ apiRoutes.group("/meals", (app) => {
     )
     .post("/",
       async (props) => {
-        const newMeal = await MealsModel.store(props.body);
+        const newMeal = await MealsModel
+          .store(
+            {
+              name: props.body.meal_name,
+              kalories: props.body.meal_kalories,
+              user_id: props.body.user_id,
+            },
+            props.body.image
+          );
         return newMeal;
       },
       {
-        body: MealsModel.storeMealsSchema
+        // body: MealsModel.storeMealsSchema
+        body: t.Object({
+          meal_name: MealsModel.storeMealsSchema.properties.name,
+          meal_kalories: t.Integer(),
+          user_id: t.Integer(),
+          image: t.File({ format: "image/jpeg" })
+        }),
       }
     )
     .put("/:id",

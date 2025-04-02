@@ -20,6 +20,8 @@ app.use(apiRoutes);
 
 app.listen(3000);
 
+export { app };
+
 console.log(`
   🦊 Elysia is running at http://${app.server?.hostname}:${app.server?.port}
   Swagger is running at http://${app.server?.hostname}:${app.server?.port}/swagger

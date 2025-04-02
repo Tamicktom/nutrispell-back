@@ -2,7 +2,7 @@
 import { Elysia, t } from "elysia";
 
 //* Local imports
-import { MealsModel } from "@/models/meals.model";
+import { MealsModel } from "@/models";
 
 const apiRoutes = new Elysia();
 

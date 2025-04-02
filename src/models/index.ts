@@ -1,0 +1,1 @@
+export { MealsModel } from "./meals.model";
